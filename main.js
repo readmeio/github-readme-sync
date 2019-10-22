@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const r2 = require('request');
 
 async function run() {
   try {
@@ -15,7 +16,19 @@ async function run() {
       path: apiFilePath,
     });
 
-    console.log(apiFile);
+    const options = {
+      formData: {
+        spec: new Buffer(apiFile.data.content, 'base64').toString('ascii'),
+      },
+      headers: {
+        'x-readme-version': 1.0,
+        'x-readme-source': 'github',
+      },
+      auth: { user: readmeKey },
+      resolveWithFullResponse: true,
+    };
+
+    return request.post(`${config.host}/api/v1/api-specification`, options).then(console.log, console.log);
   
   } catch (error) {
     core.setFailed(error.message);
