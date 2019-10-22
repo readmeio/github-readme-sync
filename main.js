@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const request = require('request');
+const request = require('request-promise-native');
 
 async function run() {
   try {
