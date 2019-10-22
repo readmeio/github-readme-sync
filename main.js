@@ -18,7 +18,9 @@ async function run() {
     });
 
     const Readable = new stream.Readable();
+    s._read = () => { }; // redundant? see update below
     Readable.push(new Buffer(apiFile.data.content, 'base64').toString('ascii'))
+    s.push(null);
 
     const options = {
       formData: {
