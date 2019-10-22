@@ -1,0 +1,13 @@
+name: 'ReadMe API Github Sync'
+description: 'Sync API Spec files to ReadMe automatically'
+author: 'ReadMe'
+inputs: 
+  repo-token:
+    description: 'The GITHUB_TOKEN secret'
+  api-file-path:
+    description: 'The path for your API spec file'
+  readme-api-key:
+    description: 'Your API key for your ReadMe project'
+runs:
+  using: 'node12'
+  main: 'main.js'
