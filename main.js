@@ -26,7 +26,7 @@ async function run() {
       },
       headers: {
         'x-readme-version': 1.0,
-        'x-readme-source': 'github',
+        'x-readme-source': 'api',
       },
       auth: { user: readmeKey },
       resolveWithFullResponse: true,
