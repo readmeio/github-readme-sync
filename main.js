@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const r2 = require('request');
+const request = require('request');
 
 async function run() {
   try {
