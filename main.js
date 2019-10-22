@@ -17,14 +17,15 @@ async function run() {
       path: apiFilePath,
     });
 
-    const Readable = new stream.Readable();
-    Readable._read = () => { }; // redundant? see update below
-    Readable.push(new Buffer(apiFile.data.content, 'base64').toString('ascii'))
-    Readable.push(null);
+    const Readable = stream.Readable;
+    const s = new Readable();
+    s._read = () => { }; // redundant? see update below
+    s.push(new Buffer(apiFile.data.content, 'base64').toString('ascii'))
+    s.push(null);
 
     const options = {
       formData: {
-        spec: Readable,
+        spec: s,
       },
       headers: {
         'x-readme-version': 1.0,
