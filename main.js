@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const request = require('request-promise-native');
 const fs = require('fs');
+const path = require('path');
 
 async function run() {
   try {
