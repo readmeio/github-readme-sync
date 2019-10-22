@@ -28,7 +28,7 @@ async function run() {
       resolveWithFullResponse: true,
     };
 
-    return request.post(`${config.host}/api/v1/api-specification`, options).then(console.log, console.log);
+    return request.post('https://dash.readme.io/api/v1/api-specification', options).then(console.log, console.log);
   
   } catch (error) {
     core.setFailed(error.message);
