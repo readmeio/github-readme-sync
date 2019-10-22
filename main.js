@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const request = require('request-promise-native');
+const stream = require('stream');
 
 async function run() {
   try {
@@ -16,9 +17,12 @@ async function run() {
       path: apiFilePath,
     });
 
+    const Readable = new stream.Readable();
+    Readable.push(new Buffer(apiFile.data.content, 'base64').toString('ascii'))
+
     const options = {
       formData: {
-        spec: new Buffer(apiFile.data.content, 'base64').toString('ascii'),
+        spec: Readable,
       },
       headers: {
         'x-readme-version': 1.0,
