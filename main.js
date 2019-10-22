@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const request = require('request-promise-native');
-const stream = require('stream');
+const fs = require('fs');
 
 async function run() {
   try {
@@ -17,15 +17,11 @@ async function run() {
       path: apiFilePath,
     });
 
-    const Readable = stream.Readable;
-    const s = new Readable();
-    s._read = () => { }; // redundant? see update below
-    s.push(new Buffer(apiFile.data.content, 'base64').toString('ascii'))
-    s.push(null);
+    fs.writeFileSync('file.json', new Buffer(apiFile.data.content, 'base64').toString('ascii'));
 
     const options = {
       formData: {
-        spec: s,
+        spec: fs.createReadStream(path.resolve(process.cwd(), 'file.json')),
       },
       headers: {
         'x-readme-version': 1.0,
