@@ -8,6 +8,8 @@ async function run() {
   try {
     const readmeKey = core.getInput('readme-api-key', { required: true });
     const apiFilePath = core.getInput('api-file-path', { required: true });
+    const apiSettingId = core.getInput('readme-api-id', { required: true });
+    const apiVersion = core.getInput('readme-api-version', { required: true });
     const token = core.getInput('repo-token', { required: true });
   
     const client = new github.GitHub(token);
@@ -25,14 +27,18 @@ async function run() {
         spec: fs.createReadStream(path.resolve(process.cwd(), 'file.json')),
       },
       headers: {
-        'x-readme-version': 1.0,
+        'x-readme-version': apiVersion,
         'x-readme-source': 'api',
       },
       auth: { user: readmeKey },
       resolveWithFullResponse: true,
     };
 
-    return request.post('https://dash.readme.io/api/v1/api-specification', options).then(console.log, console.log);
+    return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(() => {
+      'Success!'
+    }, (err) => {
+      core.setFailed(err.message);
+    });
   
   } catch (error) {
     core.setFailed(error.message);

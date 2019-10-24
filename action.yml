@@ -8,6 +8,10 @@ inputs:
     description: 'The path for your API spec file'
   readme-api-key:
     description: 'Your API key for your ReadMe project'
+  readme-api-id:
+    description: 'ID for the API Setting in ReadMe'
+  readme-api-version:
+    description: 'ReadMe version to sync API into'
 runs:
   using: 'node12'
   main: 'main.js'
