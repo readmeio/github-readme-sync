@@ -1,6 +1,8 @@
 name: 'ReadMe API Github Sync'
 description: 'Sync API Spec files to ReadMe automatically'
 author: 'ReadMe'
+icon: 'code'
+color: 'blue'
 inputs: 
   repo-token:
     description: 'The GITHUB_TOKEN secret'
