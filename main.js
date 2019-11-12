@@ -18,6 +18,7 @@ async function run() {
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       path: apiFilePath,
+      ref: github.context.ref,
     });
 
     fs.writeFileSync('file.json', new Buffer(apiFile.data.content, 'base64').toString('ascii'));
