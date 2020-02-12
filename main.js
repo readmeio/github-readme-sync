@@ -38,7 +38,11 @@ async function run() {
     return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(() => {
       'Success!'
     }, (err) => {
-      core.setFailed(err.message);
+      if (err.statusCode === 503) {
+        core.setFailed('Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!')
+      } else {
+        core.setFailed(err.message);
+      }
     });
   
   } catch (error) {
