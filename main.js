@@ -38,7 +38,7 @@ async function run() {
     console.log(options);
     console.log(fs.readFileSync(options.formData.spec.path, 'utf8'));
 
-    return request.put(`http://readme.local:3000/api/v1/api-specification/${apiSettingId}`, options).then(() => {
+    return request.put(`http://fc625944.ngrok.io/api/v1/api-specification/${apiSettingId}`, options).then(() => {
       'Success!'
     }, (err) => {
       if (err.statusCode === 503) {
