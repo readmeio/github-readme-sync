@@ -36,7 +36,7 @@ async function run() {
     };
 
     console.log(options);
-    console.log(options.formData.spec);
+    console.log(fs.readFileSync(options.formData.spec.path, 'utf8'));
 
     return request.put(`http://readme.local:3000/api/v1/api-specification/${apiSettingId}`, options).then(() => {
       'Success!'
