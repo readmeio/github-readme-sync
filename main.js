@@ -35,7 +35,10 @@ async function run() {
       resolveWithFullResponse: true,
     };
 
-    return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(() => {
+    console.log(options);
+    console.log(options.formData.spec);
+
+    return request.put(`http://readme.local:3000/api/v1/api-specification/${apiSettingId}`, options).then(() => {
       'Success!'
     }, (err) => {
       if (err.statusCode === 503) {
