@@ -11,7 +11,7 @@ async function run() {
     const apiSettingId = core.getInput('readme-api-id', { required: true });
     const apiVersion = core.getInput('readme-api-version', { required: true });
     const token = core.getInput('repo-token', { required: true });
-  
+
     const client = new github.GitHub(token);
 
     const apiFile = await client.repos.getContents({
@@ -21,7 +21,7 @@ async function run() {
       ref: github.context.ref,
     });
 
-    fs.writeFileSync('file.json', new Buffer(apiFile.data.content, 'base64').toString('ascii'));
+    fs.writeFileSync('file.json', Buffer.from(apiFile.data.content, 'base64').toString('utf8'));
 
     const options = {
       formData: {
@@ -44,7 +44,7 @@ async function run() {
         core.setFailed(err.message);
       }
     });
-  
+
   } catch (error) {
     core.setFailed(error.message);
   }
