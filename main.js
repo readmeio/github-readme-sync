@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 
 async function run() {
+  console.log('test');
+
   try {
     const readmeKey = core.getInput('readme-api-key', { required: true });
     const apiFilePath = core.getInput('api-file-path', { required: true });
