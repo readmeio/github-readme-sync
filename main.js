@@ -1,16 +1,20 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const exec = require('@actions/exec');
 const request = require('request-promise-native');
 const fs = require('fs');
 const path = require('path');
 
 async function run() {
+  await exec.exec(`oas generate swagger.yaml`);
+
+  return;
   try {
     const readmeKey = core.getInput('readme-api-key', { required: true });
     const apiFilePath = core.getInput('api-file-path', { required: true });
     const apiSettingId = core.getInput('readme-api-id', { required: true });
     const apiVersion = core.getInput('readme-api-version', { required: true });
-    const token = core.getInput('repo-token', { required: true });
+    //const token = core.getInput('repo-token', { required: true });
 
     const client = new github.GitHub(token);
 
