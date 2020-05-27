@@ -1,4 +1,4 @@
-This will help you work on it locally!
+🚨 Okay I couldn't actually get this working, but I got close so I'm keeping it here!
 
 # Docker setup
 Install the Docker MacOS app and run it: https://hub.docker.com/editions/community/docker-ce-desktop-mac/?tab=description
