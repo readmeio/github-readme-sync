@@ -8,6 +8,7 @@ const OAS = require('oas-normalize');
 
 async function run() {
   let oasKey;
+
   try {
     oasKey = core.getInput('readme-oas-key', { required: true });
   } catch(e) {
