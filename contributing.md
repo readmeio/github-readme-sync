@@ -1,4 +1,10 @@
-🚨 Okay I couldn't actually get this working, but I got close so I'm keeping it here!
+# How to run it locally
+
+Run `npm run demo` to attempt to mimic the GitHub server. It's not perfect, but it's way easier than getting `act` set up.
+
+-----
+
+🚨 **Old Stuff:** Okay I couldn't actually get this working, but I got close so I'm keeping it here!
 
 # Docker setup
 Install the Docker MacOS app and run it: https://hub.docker.com/editions/community/docker-ce-desktop-mac/?tab=description

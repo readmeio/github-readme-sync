@@ -6,13 +6,15 @@
   "dependencies": {
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",
-    "@actions/exec": "1.0.4",
+    "oas": "latest",
+    "oas-normalize": "^2.1.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "demo": "node ./demo/demo"
   },
   "keywords": [],
   "author": "",
