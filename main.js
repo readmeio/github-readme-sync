@@ -7,7 +7,6 @@ const swaggerInline = require('swagger-inline');
 const OAS = require('oas-normalize');
 
 async function run() {
-  console.log(1);
   let oasKey;
   try {
     oasKey = core.getInput('readme-oas-key', { required: true });
@@ -16,11 +15,9 @@ async function run() {
       'You need to set your key in secrets! In the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
     );
   }
-  console.log(2);
 
   const readmeKey = oasKey.split(':')[0];
   const apiSettingId = oasKey.split(':')[1];
-  console.log(3, readmeKey);
 
   /*
   const apiFilePath = core.getInput('api-file-path', { required: true });
@@ -34,12 +31,9 @@ async function run() {
     metadata: true,
     base,
   }).then(generatedSwaggerString => {
-  console.log(4);
     const oas = new OAS(generatedSwaggerString);
-  console.log(5);
 
     oas.bundle(function (err, schema) {
-  console.log(6);
       if (!schema['x-si-base']) {
         // TODO: Put this back
         /*
@@ -70,7 +64,6 @@ async function run() {
 
       // TODO: Validate it here?
 
-  console.log(7);
       return request
         .put(
           `https://dash.readme.io/api/v1/api-specification/${apiSettingId}`,
@@ -78,7 +71,6 @@ async function run() {
         )
         .then(
           () => {
-  console.log(8);
             return 'Success!';
           },
           err => {
@@ -87,6 +79,7 @@ async function run() {
                 'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!',
               );
             } else {
+              console.log(err.message);
               core.setFailed(err.message);
             }
           },
