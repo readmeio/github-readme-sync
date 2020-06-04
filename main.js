@@ -13,7 +13,7 @@ async function run() {
     oasKey = core.getInput('readme-oas-key', { required: true });
   } catch(e) {
     core.setFailed(
-      'You need to set your key in secrets! In the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
+      'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
     );
   }
 
@@ -80,11 +80,16 @@ async function run() {
                 'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!',
               );
             } else {
+              let errorOut = err.message;
               try {
-                core.setFailed(JSON.parse(err.error).description);
-              } catch(e) {
-                core.setFailed(err.message);
+                errorOut = JSON.parse(err.error).description;
+              } catch(e) { }
+
+              if (errorOut.match(/no version/i)) {  // TODO: This is brittle; I'll fix it in the API tomorrrow then come back here
+                errorOut += '\n\nBy default, we use the version in your OAS file, however this version isn\'t on ReadMe.\n\nTo override it, add `api-version: \'v1.0.0\'` to your GitHub Action. Or, add this version in ReadMe!';
               }
+
+              core.setFailed(errorOut);
             }
           },
         );
