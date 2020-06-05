@@ -48,6 +48,9 @@ async function run() {
         */
       }
 
+      schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
+      schema['x-github-sha'] = process.env.GITHUB_SHA;
+
       const options = {
         formData: {
           spec: {
