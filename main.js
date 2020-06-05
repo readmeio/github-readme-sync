@@ -7,13 +7,17 @@ const swaggerInline = require('swagger-inline');
 const OAS = require('oas-normalize');
 
 async function run() {
+  console.log("Trying some stuff...");
+  console.log(process.env.GITHUB_REPOSITORY);
+  console.log(process.env);
+
   let oasKey;
 
   try {
     oasKey = core.getInput('readme-oas-key', { required: true });
-  } catch(e) {
+  } catch (e) {
     core.setFailed(
-      'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
+      'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.',
     );
   }
 
@@ -83,10 +87,12 @@ async function run() {
               let errorOut = err.message;
               try {
                 errorOut = JSON.parse(err.error).description;
-              } catch(e) { }
+              } catch (e) {}
 
-              if (errorOut.match(/no version/i)) {  // TODO: This is brittle; I'll fix it in the API tomorrrow then come back here
-                errorOut += '\n\nBy default, we use the version in your OAS file, however this version isn\'t on ReadMe.\n\nTo override it, add `api-version: \'v1.0.0\'` to your GitHub Action. Or, add this version in ReadMe!';
+              if (errorOut.match(/no version/i)) {
+                // TODO: This is brittle; I'll fix it in the API tomorrrow then come back here
+                errorOut +=
+                  "\n\nBy default, we use the version in your OAS file, however this version isn't on ReadMe.\n\nTo override it, add `api-version: 'v1.0.0'` to your GitHub Action. Or, add this version in ReadMe!";
               }
 
               core.setFailed(errorOut);
@@ -94,6 +100,8 @@ async function run() {
           },
         );
     });
+  }).catch((err) => {
+    core.setFailed("There was an error finding or loading your OAS file.\n\n" + (err.message || err));
   });
 
   /*
