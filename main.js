@@ -7,10 +7,6 @@ const swaggerInline = require('swagger-inline');
 const OAS = require('oas-normalize');
 
 async function run() {
-  console.log("Trying some stuff...");
-  console.log(process.env.GITHUB_REPOSITORY);
-  console.log(process.env);
-
   let oasKey;
 
   try {
