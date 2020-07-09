@@ -1,10 +1,14 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const request = require('request-promise-native');
+const glob = require('glob');
 const fs = require('fs');
 const path = require('path');
 const swaggerInline = require('swagger-inline');
 const OAS = require('oas-normalize');
+const promisify = require('util').promisify;
+
+const globPromise = promisify(glob);
 
 async function run() {
   let oasKey;
@@ -26,11 +30,12 @@ async function run() {
   const apiVersion = core.getInput('readme-api-version', { required: true });
   */
 
-  var base = 'swagger.yaml'; // TODO! fix this;
+  const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
+
   swaggerInline('**/*', {
     format: '.json',
     metadata: true,
-    base,
+    base: files[0],
   }).then(generatedSwaggerString => {
     const oas = new OAS(generatedSwaggerString);
 

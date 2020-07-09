@@ -6,6 +6,7 @@
   "dependencies": {
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",
+    "glob": "^7.1.6",
     "oas": "latest",
     "oas-normalize": "^2.1.0",
     "request": "^2.88.0",
