@@ -24,12 +24,18 @@ async function run() {
   const apiVersion = core.getInput('api-version');
   const apiFilePath = core.getInput('oas-file-path');
 
-  const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
+  let baseFile = apiFilePath;
+
+  if (!baseFile) {
+    const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
+    baseFile = files[0];
+    console.log(`Found file: ${baseFile}`);
+  }
 
   swaggerInline('**/*', {
     format: '.json',
     metadata: true,
-    base: apiFilePath || files[0],
+    base: baseFile,
   }).then(generatedSwaggerString => {
     const oas = new OAS(generatedSwaggerString);
 
