@@ -1,9 +1,6 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
 const request = require('request-promise-native');
 const glob = require('glob');
-const fs = require('fs');
-const path = require('path');
 const swaggerInline = require('swagger-inline');
 const OAS = require('oas-normalize');
 const promisify = require('util').promisify;
@@ -24,18 +21,15 @@ async function run() {
   const readmeKey = oasKey.split(':')[0];
   const apiSettingId = oasKey.split(':')[1];
 
-  /*
-  const apiFilePath = core.getInput('api-file-path', { required: true });
-  const apiSettingId = core.getInput('readme-api-id', { required: true });
-  const apiVersion = core.getInput('readme-api-version', { required: true });
-  */
+  const apiVersion = core.getInput('api-version');
+  const apiFilePath = core.getInput('oas-file-path');
 
   const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
 
   swaggerInline('**/*', {
     format: '.json',
     metadata: true,
-    base: files[0],
+    base: apiFilePath || files[0],
   }).then(generatedSwaggerString => {
     const oas = new OAS(generatedSwaggerString);
 
@@ -63,8 +57,7 @@ async function run() {
           },
         },
         headers: {
-          // TODO! Put back in variable
-          'x-readme-version': schema.info.version, // apiVersion,
+          'x-readme-version': apiVersion || schema.info.version, // apiVersion,
           'x-readme-source': 'github',
         },
         auth: { user: readmeKey },
@@ -107,65 +100,6 @@ async function run() {
   }).catch((err) => {
     core.setFailed("There was an error finding or loading your OAS file.\n\n" + (err.message || err));
   });
-
-  /*
-  return;
-  try {
-    const readmeKey = core.getInput('readme-api-key', { required: true });
-    const apiFilePath = core.getInput('api-file-path', { required: true });
-    const apiSettingId = core.getInput('readme-api-id', { required: true });
-    const apiVersion = core.getInput('readme-api-version', { required: true });
-    //const token = core.getInput('repo-token', { required: true });
-
-    const client = new github.GitHub(token);
-
-    const apiFile = await client.repos.getContents({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      path: apiFilePath,
-      ref: github.context.ref,
-    });
-
-    fs.writeFileSync(
-      'file.json',
-      Buffer.from(apiFile.data.content, 'base64').toString('utf8'),
-    );
-
-    const options = {
-      formData: {
-        spec: fs.createReadStream(path.resolve(process.cwd(), 'file.json')),
-      },
-      headers: {
-        'x-readme-version': apiVersion,
-        'x-readme-source': 'github',
-      },
-      auth: { user: readmeKey },
-      resolveWithFullResponse: true,
-    };
-
-    return request
-      .put(
-        `https://dash.readme.io/api/v1/api-specification/${apiSettingId}`,
-        options,
-      )
-      .then(
-        () => {
-          'Success!';
-        },
-        err => {
-          if (err.statusCode === 503) {
-            core.setFailed(
-              'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!',
-            );
-          } else {
-            core.setFailed(err.message);
-          }
-        },
-      );
-  } catch (error) {
-    core.setFailed(error.message);
-  }
-  */
 }
 
 run();
