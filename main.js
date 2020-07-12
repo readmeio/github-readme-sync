@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const core = require('@actions/core');
 const request = require('request-promise-native');
 const glob = require('glob');
@@ -14,7 +15,7 @@ async function run() {
     oasKey = core.getInput('readme-oas-key', { required: true });
   } catch (e) {
     core.setFailed(
-      'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.',
+      'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
     );
   }
 
@@ -27,7 +28,7 @@ async function run() {
   let baseFile = apiFilePath;
 
   if (!baseFile) {
-    const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
+    const files = await globPromise('**/{swagger,oas}.{json,yaml}', { dot: true });
     baseFile = files[0];
     console.log(`Found spec file: ${baseFile}`);
   }
@@ -37,61 +38,59 @@ async function run() {
     metadata: true,
     base: baseFile,
     ignoreErrors: true,
-  }).then(generatedSwaggerString => {
-    const oas = new OAS(generatedSwaggerString);
+  })
+    .then(generatedSwaggerString => {
+      const oas = new OAS(generatedSwaggerString);
 
-    oas.bundle(function (err, schema) {
-      if (!schema['x-si-base']) {
-        // TODO: Put this back
-        /*
+      oas.bundle(function (err, schema) {
+        if (!schema['x-si-base']) {
+          // TODO: Put this back
+          /*
         console.log("We couldn't find a Swagger file.".red);
         console.log(`Don't worry, it's easy to get started! Run ${'oas init'.yellow} to get started.`);
         process.exit(1);
         */
-      }
+        }
 
-      schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
-      schema['x-github-sha'] = process.env.GITHUB_SHA;
+        schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
+        schema['x-github-sha'] = process.env.GITHUB_SHA;
 
-      const options = {
-        formData: {
-          spec: {
-            value: JSON.stringify(schema),
-            options: {
-              filename: 'swagger.json',
-              contentType: 'application/json',
+        const options = {
+          formData: {
+            spec: {
+              value: JSON.stringify(schema),
+              options: {
+                filename: 'swagger.json',
+                contentType: 'application/json',
+              },
             },
           },
-        },
-        headers: {
-          'x-readme-version': apiVersion || schema.info.version, // apiVersion,
-          'x-readme-source': 'github',
-        },
-        auth: { user: readmeKey },
-        resolveWithFullResponse: true,
-      };
+          headers: {
+            'x-readme-version': apiVersion || schema.info.version, // apiVersion,
+            'x-readme-source': 'github',
+          },
+          auth: { user: readmeKey },
+          resolveWithFullResponse: true,
+        };
 
-      // TODO: Validate it here?
+        // TODO: Validate it here?
 
-      return request
-        .put(
-          `https://dash.readme.io/api/v1/api-specification/${apiSettingId}`,
-          options,
-        )
-        .then(
+        return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(
           () => {
             return 'Success!';
           },
           err => {
             if (err.statusCode === 503) {
               core.setFailed(
-                'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!',
+                'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!'
               );
             } else {
               let errorOut = err.message;
               try {
                 errorOut = JSON.parse(err.error).description;
-              } catch (e) {}
+              } catch (e) {
+                // Should we do something here?
+              }
 
               if (errorOut.match(/no version/i)) {
                 // TODO: This is brittle; I'll fix it in the API tomorrrow then come back here
@@ -101,12 +100,13 @@ async function run() {
 
               core.setFailed(errorOut);
             }
-          },
+          }
         );
+      });
+    })
+    .catch(err => {
+      core.setFailed(`There was an error finding or loading your OAS file.\n\n${err.message || err}`);
     });
-  }).catch((err) => {
-    core.setFailed("There was an error finding or loading your OAS file.\n\n" + (err.message || err));
-  });
 }
 
 run();
