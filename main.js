@@ -29,13 +29,14 @@ async function run() {
   if (!baseFile) {
     const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
     baseFile = files[0];
-    console.log(`Found file: ${baseFile}`);
+    console.log(`Found spec file: ${baseFile}`);
   }
 
   swaggerInline('**/*', {
     format: '.json',
     metadata: true,
     base: baseFile,
+    ignoreErrors: true,
   }).then(generatedSwaggerString => {
     const oas = new OAS(generatedSwaggerString);
 
