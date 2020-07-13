@@ -11,7 +11,7 @@
     "oas-normalize": "^2.1.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "swagger-inline": "git+https://github.com/readmeio/swagger-inline.git#add-ignore-errors-option"
+    "swagger-inline": "^3.2.0"
   },
   "devDependencies": {
     "@readme/eslint-config": "^3.3.3",
