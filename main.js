@@ -96,7 +96,7 @@ async function run() {
               if (errorOut.match(/no version/i)) {
                 // TODO: This is brittle; I'll fix it in the API tomorrrow then come back here
                 errorOut +=
-                  "\n\nBy default, we use the version in your OAS file, however this version isn't on ReadMe.\n\nTo override it, add `api-version: 'v1.0.0'` to your GitHub Action. Or, add this version in ReadMe!";
+                  "\n\nBy default, we use the version in your OAS file, however this version isn't on ReadMe.\n\nTo override it, add `api-version: 'v1.0.0'` to your GitHub Action, or add this version in ReadMe!";
               }
 
               core.setFailed(errorOut);
