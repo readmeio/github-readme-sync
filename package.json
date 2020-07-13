@@ -6,12 +6,24 @@
   "dependencies": {
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",
+    "glob": "^7.1.6",
+    "oas": "latest",
+    "oas-normalize": "^2.1.0",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "request-promise-native": "^1.0.7",
+    "swagger-inline": "^3.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@readme/eslint-config": "^3.3.3",
+    "eslint": "^7.4.0",
+    "prettier": "^2.0.5"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "demo": "node ./demo/demo",
+    "lint": "eslint -f unix .",
+    "prettier": "prettier --list-different \"./**/**.js\"",
+    "prettier:write": "prettier --write \"./**/**.js\"",
+    "test": "npm run lint"
   },
   "keywords": [],
   "author": "",

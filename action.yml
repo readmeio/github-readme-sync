@@ -4,17 +4,14 @@ author: 'ReadMe'
 branding:
   icon: 'code'
   color: 'blue'
-inputs: 
-  repo-token:
-    description: 'The GITHUB_TOKEN secret'
-  api-file-path:
-    description: 'The path for your API spec file'
-  readme-api-key:
-    description: 'Your API key for your ReadMe project'
-  readme-api-id:
-    description: 'ID for the API Setting in ReadMe'
-  readme-api-version:
-    description: 'ReadMe version to sync API into'
+inputs:
+  readme-oas-key:
+    description: 'Your ReadMe key, which we give you when setting up GitHub Sync in ReadMe!'
+
+  oas-file-path:
+    description: 'The relative path for your API spec file (Default: We try to guess!)'
+  api-version:
+    description: 'ReadMe version to sync API into (Default: info.version in your schema)'
 runs:
   using: 'node12'
   main: 'main.js'
