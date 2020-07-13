@@ -27,7 +27,7 @@ async function run() {
   let baseFile = apiFilePath;
 
   if (!baseFile) {
-    const files = await globPromise('**/{swagger,oas}.{json,yaml}', {dot: true});
+    const files = await globPromise('**/{swagger,oas,openapi}.{json,yaml,yml}', {dot: true});
     baseFile = files[0];
     console.log(`Found spec file: ${baseFile}`);
   }
