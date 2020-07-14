@@ -9,3 +9,5 @@ updates:
   - erunion
   labels:
   - dependencies
+- name: ReadMe API GitHub Sync
+  uses: readmeio/github-readme-sync@2.0.0
