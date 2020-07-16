@@ -30,6 +30,13 @@ async function run() {
   if (!baseFile) {
     const files = await globPromise('**/{swagger,oas,openapi}.{json,yaml,yml}', { dot: true });
     baseFile = files[0];
+
+    if (!baseFile) {
+      return core.setFailed(
+        "We couldn't find your OAS/Swagger file!\n\nYou can specify it in your .github/workflows/readme.yaml file by putting a `oas-file-path` value under the `readme-oas-key` value!"
+      );
+    }
+
     console.log(`Found spec file: ${baseFile}`);
   }
 
@@ -89,7 +96,7 @@ async function run() {
               try {
                 errorOut = JSON.parse(err.error).description;
               } catch (e) {
-                // Should we do something here?
+                errorOut = ''; // To avoid issues below!
               }
 
               if (errorOut.match(/no version/i)) {
