@@ -10,7 +10,7 @@
     "oas": "latest",
     "oas-normalize": "^2.1.0",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
+    "request-promise-native": "^1.0.9",
     "swagger-inline": "^3.2.0"
   },
   "devDependencies": {
