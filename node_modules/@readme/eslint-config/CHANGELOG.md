@@ -1,3 +1,15 @@
+## 3.4.0 (2020-07-27)
+
+* chore(deps-dev): bump @commitlint/cli from 9.0.1 to 9.1.1 (#110) ([bdf1d9e](https://github.com/readmeio/eslint-config/commit/bdf1d9e)), closes [#110](https://github.com/readmeio/eslint-config/issues/110)
+* chore(deps-dev): bump @commitlint/config-conventional (#113) ([78c931e](https://github.com/readmeio/eslint-config/commit/78c931e)), closes [#113](https://github.com/readmeio/eslint-config/issues/113)
+* chore(deps-dev): bump eslint from 7.4.0 to 7.5.0 (#109) ([8817e70](https://github.com/readmeio/eslint-config/commit/8817e70)), closes [#109](https://github.com/readmeio/eslint-config/issues/109)
+* chore(deps): bump eslint-plugin-jest from 23.18.0 to 23.18.2 (#111) ([6ef77dd](https://github.com/readmeio/eslint-config/commit/6ef77dd)), closes [#111](https://github.com/readmeio/eslint-config/issues/111)
+* chore(deps): bump eslint-plugin-react from 7.20.3 to 7.20.4 (#114) ([4ecc557](https://github.com/readmeio/eslint-config/commit/4ecc557)), closes [#114](https://github.com/readmeio/eslint-config/issues/114)
+* chore(deps): bump eslint-plugin-unicorn from 20.1.0 to 21.0.0 (#112) ([b0dfe5c](https://github.com/readmeio/eslint-config/commit/b0dfe5c)), closes [#112](https://github.com/readmeio/eslint-config/issues/112)
+* chore(deps): bump lodash from 4.17.15 to 4.17.19 (#108) ([2333940](https://github.com/readmeio/eslint-config/commit/2333940)), closes [#108](https://github.com/readmeio/eslint-config/issues/108)
+
+
+
 ## <small>3.3.3 (2020-07-06)</small>
 
 * chore(deps-dev): bump eslint from 7.3.1 to 7.4.0 (#107) ([6364f1f](https://github.com/readmeio/eslint-config/commit/6364f1f)), closes [#107](https://github.com/readmeio/eslint-config/issues/107)
