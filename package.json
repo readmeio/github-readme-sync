@@ -7,7 +7,7 @@
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",
     "glob": "^7.1.6",
-    "oas-normalize": "^2.1.0",
+    "oas-normalize": "^2.2.2",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
     "swagger-inline": "^3.2.0"
