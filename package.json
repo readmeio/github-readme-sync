@@ -10,7 +10,7 @@
     "oas-normalize": "^2.2.2",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.9",
-    "swagger-inline": "^3.2.0"
+    "swagger-inline": "^3.2.1"
   },
   "devDependencies": {
     "@readme/eslint-config": "^3.4.0",
