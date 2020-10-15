@@ -24,6 +24,7 @@
     "prettier:write": "prettier --write \"./**/**.js\"",
     "test": "npm run lint"
   },
+  "prettier": "@readme/eslint-config/prettier",
   "keywords": [],
   "author": "",
   "license": "ISC"
