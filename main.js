@@ -20,15 +20,20 @@ async function run() {
   }
 
   const readmeKey = oasKey.split(':')[0];
+  core.debug(`readmeKey (split from \`readme-oas-key\`): ${readmeKey}`);
   const apiSettingId = oasKey.split(':')[1];
+  core.debug(`apiSettingId (split from \`readme-oas-key\`): ${apiSettingId}`);
 
   const apiVersion = core.getInput('api-version');
+  core.debug(`apiVersion (from \`api-version\` input): ${apiVersion}`);
   const apiFilePath = core.getInput('oas-file-path');
+  core.debug(`apiFilePath (from \`oas-file-path\` input): ${apiFilePath}`);
 
   let baseFile = apiFilePath;
 
   if (!baseFile) {
     const files = await globPromise('**/{swagger,oas,openapi}.{json,yaml,yml}', { dot: true });
+    core.debug(`${files.length} file match(es) found: ${files.toString()}`);
     if (!files.length)
       throw core.setFailed(
         'Unable to locate a OpenAPI/Swagger file. Try specifying the path via the `oas-file-path` option in your workflow file!'
@@ -49,16 +54,21 @@ async function run() {
       try {
         await validate.call(oas);
       } catch (e) {
+        core.debug(`Error validating spec: ${e}`);
         const innerMessage = e.errors && e.errors[0] && e.errors[0].message;
         const outerMessage = e.name ? `${e.name}: ${e.message}` : e.message;
         throw core.setFailed(`There was an error validating your OAS file.\n\n${innerMessage || outerMessage || e}`);
       }
+      core.debug('OpenAPI/Swagger file validated!');
 
       oas.bundle(function (err, schema) {
         schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
+        core.debug(`\`x-github-repo\`: ${schema['x-github-repo']}`);
         schema['x-github-sha'] = process.env.GITHUB_SHA;
+        core.debug(`\`x-github-sha\`: ${schema['x-github-sha']}`);
 
         const version = apiVersion || schema.info.version;
+        core.debug(`Version passed into \`x-readme-version\` header: ${version}`);
 
         const options = {
           formData: {
@@ -88,6 +98,7 @@ async function run() {
                 'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!'
               );
             } else {
+              core.debug(`Error received from ReadMe API: ${err}`);
               let errorOut = err.message;
               let errorObj;
               try {
@@ -97,6 +108,7 @@ async function run() {
                   if (errorObj.suggestion) errorOut = `${errorOut}\n\n${errorObj.suggestion}`;
                 }
               } catch (e) {
+                core.debug(`Error parsing error object: ${e}`);
                 throw core.setFailed(
                   'Error parsing error object. Contact support@readme.io with a copy of your debug logs for help!'
                 );

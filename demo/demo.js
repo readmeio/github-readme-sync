@@ -36,12 +36,12 @@ const go = exec('node ../main', { cwd: './demo' });
 
 go.stdout.on('data', function (data) {
   if (data.toString().match(/::error::/)) {
-    // This is a core.setFailed error!
     console.log(`🚨 ${data.toString().replace(/::error::/, '')}`);
-    process.exit(0);
-  }
-
-  console.log(`📝: ${data.toString()}`);
+  } else if (data.toString().match(/::debug::/g)) {
+    // This is so we can split debug statements into separate lines
+    const output = data.toString().replace(/^::debug::/g, '🐛 ');
+    console.log(output.toString().replace(/::debug::/g, '\n🐛 '));
+  } else console.log(`📝 ${data.toString()}`);
 });
 
 go.stderr.on('data', function (data) {
@@ -49,5 +49,7 @@ go.stderr.on('data', function (data) {
 });
 
 go.on('exit', function (code) {
-  console.log(`✅ Exited the program! (${code.toString()})`);
+  const emoji = code === 0 ? '✅' : '❌';
+  const result = code === 0 ? 'succeeded' : 'failed';
+  console.log(`${emoji} Workflow ${result}! (${code.toString()})`);
 });
