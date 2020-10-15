@@ -58,6 +58,8 @@ async function run() {
         schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
         schema['x-github-sha'] = process.env.GITHUB_SHA;
 
+        const version = apiVersion || schema.info.version;
+
         const options = {
           formData: {
             spec: {
@@ -69,7 +71,7 @@ async function run() {
             },
           },
           headers: {
-            'x-readme-version': apiVersion || schema.info.version, // apiVersion,
+            'x-readme-version': version,
             'x-readme-source': 'github',
           },
           auth: { user: readmeKey },
@@ -87,16 +89,35 @@ async function run() {
               );
             } else {
               let errorOut = err.message;
+              let errorObj;
               try {
-                errorOut = JSON.parse(err.error).description;
+                errorObj = JSON.parse(err.error);
+                if (errorObj.message) {
+                  errorOut = errorObj.message;
+                  if (errorObj.suggestion) errorOut = `${errorOut}\n\n${errorObj.suggestion}`;
+                }
               } catch (e) {
-                // Should we do something here?
+                throw core.setFailed(
+                  'Error parsing error object. Contact support@readme.io with a copy of your debug logs for help!'
+                );
               }
 
-              if (errorOut.match(/no version/i)) {
-                // TODO: This is brittle; I'll fix it in the API tomorrrow then come back here
-                errorOut +=
-                  "\n\nBy default, we use the version in your OAS file, however this version isn't on ReadMe.\n\nTo override it, add `api-version: 'v1.0.0'` to your GitHub Action, or add this version in ReadMe!";
+              if (errorObj.error && errorObj.error === 'SPEC_VERSION_NOTFOUND') {
+                errorOut += `\n\nYou can specify this override by adding \`api-version: 'v1.0.0'\` to your GitHub Action (or add this version (${version}) in ReadMe!)`;
+                errorOut += `\n\nDocs: https://docs.readme.com/docs/versions`;
+              }
+
+              if (errorObj.error && errorObj.error === 'SPEC_ID_ALREADY_EXISTS') {
+                const match = errorOut.match(/(?<=(recommend )).{24}/);
+                if (match) {
+                  const newId = match[0];
+                  errorOut += `\n\nJust set \`readme-oas-key\` to \`${readmeKey}:${newId}\`!`;
+                } else
+                  errorOut += `\n\nThe spec ID is located in the second half of the \`readme-oas-key\` after the colon separator.`;
+              }
+
+              if (errorObj.error && errorObj.error === 'INTERNAL_ERROR') {
+                errorOut += `\n\nBe sure to include a copy of your debug logs! Info: https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#how-to-access-step-debug-logs`;
               }
 
               core.setFailed(errorOut);
