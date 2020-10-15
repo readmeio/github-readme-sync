@@ -10,19 +10,20 @@ const globPromise = promisify(glob);
 
 async function run() {
   let oasKey;
+  let readmeKey;
+  let apiSettingId;
 
   try {
     oasKey = core.getInput('readme-oas-key', { required: true });
+    readmeKey = oasKey.split(':')[0];
+    core.debug(`readmeKey (split from \`readme-oas-key\`): ${readmeKey}`);
+    apiSettingId = oasKey.split(':')[1];
+    core.debug(`apiSettingId (split from \`readme-oas-key\`): ${apiSettingId}`);
   } catch (e) {
     core.setFailed(
       'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
     );
   }
-
-  const readmeKey = oasKey.split(':')[0];
-  core.debug(`readmeKey (split from \`readme-oas-key\`): ${readmeKey}`);
-  const apiSettingId = oasKey.split(':')[1];
-  core.debug(`apiSettingId (split from \`readme-oas-key\`): ${apiSettingId}`);
 
   const apiVersion = core.getInput('api-version');
   core.debug(`apiVersion (from \`api-version\` input): ${apiVersion}`);
