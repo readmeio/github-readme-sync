@@ -55,15 +55,6 @@ async function run() {
       }
 
       oas.bundle(function (err, schema) {
-        if (!schema['x-si-base']) {
-          // TODO: Put this back
-          /*
-        console.log("We couldn't find a Swagger file.".red);
-        console.log(`Don't worry, it's easy to get started! Run ${'oas init'.yellow} to get started.`);
-        process.exit(1);
-        */
-        }
-
         schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
         schema['x-github-sha'] = process.env.GITHUB_SHA;
 
@@ -84,8 +75,6 @@ async function run() {
           auth: { user: readmeKey },
           resolveWithFullResponse: true,
         };
-
-        // TODO: Validate it here?
 
         return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(
           () => {
