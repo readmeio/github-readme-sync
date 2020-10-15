@@ -34,7 +34,7 @@ async function run() {
         'Unable to locate a OpenAPI/Swagger file. Try specifying the path via the `oas-file-path` option in your workflow file!'
       );
     baseFile = files[0];
-    console.log(`Found spec file: ${baseFile}`);
+    core.info(`OpenAPI/Swagger file found: ${baseFile}`);
   }
 
   swaggerInline('**/*', {
@@ -117,7 +117,7 @@ async function run() {
       });
     })
     .catch(err => {
-      core.setFailed(`There was an error finding or loading your OAS file.\n\n${err.message || err}`);
+      core.setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err.message || err}`);
     });
 }
 
