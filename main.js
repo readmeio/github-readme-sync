@@ -43,8 +43,16 @@ async function run() {
     base: baseFile,
     ignoreErrors: true,
   })
-    .then(generatedSwaggerString => {
+    .then(async generatedSwaggerString => {
       const oas = new OAS(generatedSwaggerString);
+      const validate = promisify(oas.validate);
+      try {
+        await validate.call(oas);
+      } catch (e) {
+        const innerMessage = e.errors && e.errors[0] && e.errors[0].message;
+        const outerMessage = e.name ? `${e.name}: ${e.message}` : e.message;
+        throw core.setFailed(`There was an error validating your OAS file.\n\n${innerMessage || outerMessage || e}`);
+      }
 
       oas.bundle(function (err, schema) {
         if (!schema['x-si-base']) {
