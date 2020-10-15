@@ -29,6 +29,10 @@ async function run() {
 
   if (!baseFile) {
     const files = await globPromise('**/{swagger,oas,openapi}.{json,yaml,yml}', { dot: true });
+    if (!files.length)
+      throw core.setFailed(
+        'Unable to locate a OpenAPI/Swagger file. Try specifying the path via the `oas-file-path` option in your workflow file!'
+      );
     baseFile = files[0];
     console.log(`Found spec file: ${baseFile}`);
   }
