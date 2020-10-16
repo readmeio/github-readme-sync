@@ -96,7 +96,7 @@ async function run() {
           err => {
             if (err.statusCode === 503) {
               core.setFailed(
-                'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file for help!'
+                'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file and debug logs for help!\n\nInfo: https://docs.readme.com/docs/automatically-sync-api-specification-with-github#troubleshooting'
               );
             } else {
               core.debug(`Error received from ReadMe API: ${err}`);
@@ -111,12 +111,12 @@ async function run() {
               } catch (e) {
                 core.debug(`Error parsing error object: ${e}`);
                 throw core.setFailed(
-                  'Error parsing error object. Contact support@readme.io with a copy of your debug logs for help!'
+                  'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file and debug logs for help!\n\nInfo: https://docs.readme.com/docs/automatically-sync-api-specification-with-github#troubleshooting'
                 );
               }
 
               if (errorObj.error && errorObj.error === 'SPEC_VERSION_NOTFOUND') {
-                errorOut += `\n\nYou can specify this override by adding \`api-version: 'v1.0.0'\` to your GitHub Action (or add this version (${version}) in ReadMe!)`;
+                errorOut += `\n\nYou can specify this override by adding \`api-version: 'v1.0.0'\` to your GitHub Action (or by creating version '${version}' in ReadMe!)`;
                 errorOut += `\n\nDocs: https://docs.readme.com/docs/versions`;
               }
 
@@ -130,7 +130,7 @@ async function run() {
               }
 
               if (errorObj.error && errorObj.error === 'INTERNAL_ERROR') {
-                errorOut += `\n\nBe sure to include a copy of your debug logs! Info: https://github.com/actions/toolkit/blob/master/docs/action-debugging.md#how-to-access-step-debug-logs`;
+                errorOut += `\n\nWe'll be able to solve the problem faster if you include a copy your debug logs! Info: https://docs.readme.com/docs/automatically-sync-api-specification-with-github#troubleshooting`;
               }
 
               core.setFailed(errorOut);
