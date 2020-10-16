@@ -6,7 +6,11 @@ var Generator = require('./generator.js')
 // Generate base directory
 var databaseDir = path.resolve(__dirname, '..', 'db-generated')
 if (!fs.existsSync(databaseDir)) {
-  fs.mkdir(databaseDir)
+  try {
+    fs.mkdir(databaseDir)
+  } catch (Error) {
+    fs.mkdirSync(databaseDir)
+  }
 }
 
 var generator = new Generator()
