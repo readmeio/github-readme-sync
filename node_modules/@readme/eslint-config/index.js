@@ -45,6 +45,7 @@ module.exports = {
     // "unicorn/consistent-function-scoping": "error", // Maybe?
     'unicorn/custom-error-definition': 'error',
     'unicorn/error-message': 'error',
+    'unicorn/import-style': 'error',
     'unicorn/new-for-builtins': 'error',
     'unicorn/no-array-instanceof': 'error',
     'no-nested-ternary': 'off', // Disabled in favor of `unicorn/no-nested-ternary` which has better nesting detection.
