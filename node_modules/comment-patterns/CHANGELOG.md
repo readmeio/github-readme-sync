@@ -2,6 +2,20 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## v0.10.1 - 2018-10-04
+
+### Chore
+
+- Update dependency versions (Removes security vulnerability from lodash@3)
+
+
+## v0.10.0 - 2018-10-04
+
+### Add
+
+- Multiline comment support for PHP (Sean Snyder)
+
+
 ## v0.9.0 - 2016-08-22
 ### Add
 

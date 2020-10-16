@@ -4,18 +4,18 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
-    "@actions/core": "^1.2.0",
+    "@actions/core": "^1.2.6",
     "@actions/github": "^1.1.0",
     "glob": "^7.1.6",
-    "oas-normalize": "^2.2.2",
+    "oas-normalize": "^2.3.1",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.9",
-    "swagger-inline": "^3.2.0"
+    "swagger-inline": "^3.2.2"
   },
   "devDependencies": {
     "@readme/eslint-config": "^3.4.0",
-    "eslint": "^7.6.0",
-    "prettier": "^2.0.5"
+    "eslint": "^7.11.0",
+    "prettier": "^2.1.2"
   },
   "scripts": {
     "demo": "node ./demo/demo",
