@@ -22,7 +22,7 @@ async function run() {
     readmeKey = oasKey.split(':')[0];
     apiSettingId = oasKey.split(':')[1];
   } catch (e) {
-    setFailed(
+    core.setFailed(
       'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
     );
   }
