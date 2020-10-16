@@ -151,7 +151,7 @@ async function run() {
                 const match = errorOut.match(/(?<=(something like )).{24}/);
                 if (match) {
                   const newId = match[0];
-                  errorOut += `\n\nJust set \`readme-oas-key\` to \`${readmeKey}:${newId}\`!`;
+                  errorOut += `\n\nJust set \`readme-oas-key\` to \`YOUR_README_API_KEY:${newId}\`!`;
                 } else
                   errorOut += `\n\nThe spec ID is located in the second half of the \`readme-oas-key\` after the colon separator.`;
               }
