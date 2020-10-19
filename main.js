@@ -147,7 +147,7 @@ async function run() {
                 errorOut += `\n\nDocs: https://docs.readme.com/docs/versions`;
               }
 
-              if (errorObj.error && errorObj.error === 'SPEC_ID_ALREADY_EXISTS') {
+              if (errorObj.error && errorObj.error === 'SPEC_ID_DUPLICATE') {
                 const match = errorOut.match(/(?<=(something like )).{24}/);
                 if (match) {
                   const newId = match[0];
