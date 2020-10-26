@@ -157,7 +157,7 @@ async function run() {
       });
     })
     .catch(err => {
-      setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err.message || err}`);
+      setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err && err.message}`);
     });
 }
 
