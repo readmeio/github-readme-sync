@@ -78,18 +78,8 @@ async function run() {
   })
     .then(async generatedSwaggerString => {
       const oas = new OAS(generatedSwaggerString);
-      const validate = promisify(oas.validate);
-      try {
-        await validate.call(oas);
-      } catch (e) {
-        debug(`Error validating spec: ${e}`);
-        const innerMessage = e.errors && e.errors[0] && e.errors[0].message;
-        const outerMessage = e.name ? `${e.name}: ${e.message}` : e.message;
-        throw setFailed(`There was an error validating your OAS file.\n\n${innerMessage || outerMessage || e}`);
-      }
-      debug('OpenAPI/Swagger file validated!');
-
       oas.bundle(function (err, schema) {
+        if (err) return setFailed(`Error bundling your file: ${err.message}`);
         schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
         debug(`\`x-github-repo\`: ${schema['x-github-repo']}`);
         schema['x-github-sha'] = process.env.GITHUB_SHA;
@@ -167,7 +157,7 @@ async function run() {
       });
     })
     .catch(err => {
-      setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err.message || err}`);
+      setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err && err.message}`);
     });
 }
 
