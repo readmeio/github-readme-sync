@@ -27,6 +27,11 @@ async function run() {
     );
   }
 
+  if (!readmeKey || !apiSettingId)
+    return core.setFailed(
+      'Invalid input in `readme-oas-key`. Check out our docs for information on this value: https://docs.readme.com/docs/automatically-sync-api-specification-with-github'
+    );
+
   function sanitizeKeys(input) {
     let sanitizedInput = input;
 
