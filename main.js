@@ -28,13 +28,19 @@ async function run() {
   }
 
   function sanitizeKeys(input) {
-    // Sanitize ReadMe API Key
-    const keySanitized = sanitize(readmeKey);
-    let sanitizedInput = input.replace(new RegExp(readmeKey, 'g'), keySanitized);
+    let sanitizedInput = input;
 
-    // Sanitize Spec ID
-    const specIdSanitized = sanitize(apiSettingId);
-    sanitizedInput = sanitizedInput.replace(new RegExp(apiSettingId, 'g'), specIdSanitized);
+    try {
+      // Sanitize ReadMe API Key
+      const keySanitized = sanitize(readmeKey);
+      sanitizedInput = input.replace(new RegExp(readmeKey, 'g'), keySanitized);
+
+      // Sanitize Spec ID
+      const specIdSanitized = sanitize(apiSettingId);
+      sanitizedInput = sanitizedInput.replace(new RegExp(apiSettingId, 'g'), specIdSanitized);
+    } catch (e) {
+      core.debug(`Error while sanitizing input: ${e}`);
+    }
 
     return sanitizedInput;
   }
