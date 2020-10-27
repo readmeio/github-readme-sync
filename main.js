@@ -22,19 +22,30 @@ async function run() {
     readmeKey = oasKey.split(':')[0];
     apiSettingId = oasKey.split(':')[1];
   } catch (e) {
-    core.setFailed(
+    return core.setFailed(
       'You need to set your key in secrets!\n\nIn the repo, go to Settings > Secrets and add README_OAS_KEY. You can get the value from your ReadMe account.'
     );
   }
 
-  function sanitizeKeys(input) {
-    // Sanitize ReadMe API Key
-    const keySanitized = sanitize(readmeKey);
-    let sanitizedInput = input.replace(new RegExp(readmeKey, 'g'), keySanitized);
+  if (!readmeKey || !apiSettingId)
+    return core.setFailed(
+      'Invalid input in `readme-oas-key`. Check out our docs for information on this value: https://docs.readme.com/docs/automatically-sync-api-specification-with-github'
+    );
 
-    // Sanitize Spec ID
-    const specIdSanitized = sanitize(apiSettingId);
-    sanitizedInput = sanitizedInput.replace(new RegExp(apiSettingId, 'g'), specIdSanitized);
+  function sanitizeKeys(input) {
+    let sanitizedInput = input;
+
+    try {
+      // Sanitize ReadMe API Key
+      const keySanitized = sanitize(readmeKey);
+      sanitizedInput = input.replace(new RegExp(readmeKey, 'g'), keySanitized);
+
+      // Sanitize Spec ID
+      const specIdSanitized = sanitize(apiSettingId);
+      sanitizedInput = sanitizedInput.replace(new RegExp(apiSettingId, 'g'), specIdSanitized);
+    } catch (e) {
+      core.debug(`Error while sanitizing input: ${e}`);
+    }
 
     return sanitizedInput;
   }
@@ -70,7 +81,7 @@ async function run() {
     core.info(`OpenAPI/Swagger file found: ${baseFile}`);
   }
 
-  swaggerInline('**/*', {
+  return swaggerInline('**/*', {
     format: '.json',
     metadata: true,
     base: baseFile,
