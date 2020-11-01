@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@readme/eslint-config": "^3.6.2",
-    "eslint": "^7.11.0",
+    "eslint": "^7.12.1",
     "prettier": "^2.1.2"
   },
   "scripts": {
