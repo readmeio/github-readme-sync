@@ -13,7 +13,7 @@
     "swagger-inline": "^3.2.2"
   },
   "devDependencies": {
-    "@readme/eslint-config": "^3.6.1",
+    "@readme/eslint-config": "^3.6.2",
     "eslint": "^7.11.0",
     "prettier": "^2.1.2"
   },
