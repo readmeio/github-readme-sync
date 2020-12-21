@@ -8,10 +8,6 @@ const promisify = require('util').promisify;
 
 const globPromise = promisify(glob);
 
-function sanitize(input) {
-  return input.substr(0, 3) + input.substr(3, input.length - 6).replace(/\w/g, '·') + input.substr(input.length - 3);
-}
-
 async function run() {
   let oasKey;
   let readmeKey;
@@ -32,49 +28,24 @@ async function run() {
       'Invalid input in `readme-oas-key`. Check out our docs for information on this value: https://docs.readme.com/docs/automatically-sync-api-specification-with-github'
     );
 
-  function sanitizeKeys(input) {
-    let sanitizedInput = input;
+  core.setSecret(readmeKey);
+  core.setSecret(apiSettingId);
 
-    try {
-      // Sanitize ReadMe API Key
-      const keySanitized = sanitize(readmeKey);
-      sanitizedInput = input.replace(new RegExp(readmeKey, 'g'), keySanitized);
-
-      // Sanitize Spec ID
-      const specIdSanitized = sanitize(apiSettingId);
-      sanitizedInput = sanitizedInput.replace(new RegExp(apiSettingId, 'g'), specIdSanitized);
-    } catch (e) {
-      core.debug(`Error while sanitizing input: ${e}`);
-    }
-
-    return sanitizedInput;
-  }
-
-  function debug(input) {
-    const sanitizedInput = sanitizeKeys(input);
-    return core.debug(sanitizedInput);
-  }
-
-  function setFailed(input) {
-    const sanitizedInput = sanitizeKeys(input);
-    return core.setFailed(sanitizedInput);
-  }
-
-  debug(`readmeKey (split from \`readme-oas-key\`): ${readmeKey}`);
-  debug(`apiSettingId (split from \`readme-oas-key\`): ${apiSettingId}`);
+  core.debug(`readmeKey (split from \`readme-oas-key\`): ${readmeKey}`);
+  core.debug(`apiSettingId (split from \`readme-oas-key\`): ${apiSettingId}`);
 
   const apiVersion = core.getInput('api-version');
-  debug(`apiVersion (from \`api-version\` input): ${apiVersion}`);
+  core.debug(`apiVersion (from \`api-version\` input): ${apiVersion}`);
   const apiFilePath = core.getInput('oas-file-path');
-  debug(`apiFilePath (from \`oas-file-path\` input): ${apiFilePath}`);
+  core.debug(`apiFilePath (from \`oas-file-path\` input): ${apiFilePath}`);
 
   let baseFile = apiFilePath;
 
   if (!baseFile) {
     const files = await globPromise('**/{swagger,oas,openapi}.{json,yaml,yml}', { dot: true });
-    debug(`${files.length} file match(es) found: ${files.toString()}`);
+    core.debug(`${files.length} file match(es) found: ${files.toString()}`);
     if (!files.length)
-      throw setFailed(
+      throw core.setFailed(
         'Unable to locate a OpenAPI/Swagger file. Try specifying the path via the `oas-file-path` option in your workflow file!'
       );
     baseFile = files[0];
@@ -90,14 +61,14 @@ async function run() {
     .then(async generatedSwaggerString => {
       const oas = new OAS(generatedSwaggerString);
       oas.bundle(function (err, schema) {
-        if (err) return setFailed(`Error bundling your file: ${err.message}`);
+        if (err) return core.setFailed(`Error bundling your file: ${err.message}`);
         schema['x-github-repo'] = process.env.GITHUB_REPOSITORY;
-        debug(`\`x-github-repo\`: ${schema['x-github-repo']}`);
+        core.debug(`\`x-github-repo\`: ${schema['x-github-repo']}`);
         schema['x-github-sha'] = process.env.GITHUB_SHA;
-        debug(`\`x-github-sha\`: ${schema['x-github-sha']}`);
+        core.debug(`\`x-github-sha\`: ${schema['x-github-sha']}`);
 
         const version = apiVersion || schema.info.version;
-        debug(`Version passed into \`x-readme-version\` header: ${version}`);
+        core.debug(`Version passed into \`x-readme-version\` header: ${version}`);
 
         const options = {
           formData: {
@@ -117,17 +88,17 @@ async function run() {
           resolveWithFullResponse: true,
         };
 
-        return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(
+        return request.put(`http://dash.readme.local:3000/api/v1/api-specification/${apiSettingId}`, options).then(
           () => {
             return 'Success!';
           },
           err => {
             if (err.statusCode === 503) {
-              setFailed(
+              core.setFailed(
                 'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file and debug logs for help!\n\nInfo: https://docs.readme.com/docs/automatically-sync-api-specification-with-github#troubleshooting'
               );
             } else {
-              debug(`Error received from ReadMe API: ${err}`);
+              core.debug(`Error received from ReadMe API: ${err}`);
               let errorOut = err.message;
               let errorObj;
               try {
@@ -137,8 +108,8 @@ async function run() {
                   if (errorObj.suggestion) errorOut = `${errorOut}\n\n${errorObj.suggestion}`;
                 }
               } catch (e) {
-                debug(`Error parsing error object: ${e}`);
-                throw setFailed(
+                core.debug(`Error parsing error object: ${e}`);
+                throw core.setFailed(
                   'Uh oh! There was an unexpected error uploading your file. Contact support@readme.io with a copy of your file and debug logs for help!\n\nInfo: https://docs.readme.com/docs/automatically-sync-api-specification-with-github#troubleshooting'
                 );
               }
@@ -161,14 +132,14 @@ async function run() {
                 errorOut += `\n\nWe'll be able to solve the problem faster if you include a copy your debug logs! Info: https://docs.readme.com/docs/automatically-sync-api-specification-with-github#troubleshooting`;
               }
 
-              setFailed(errorOut);
+              core.setFailed(errorOut);
             }
           }
         );
       });
     })
     .catch(err => {
-      setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err && err.message}`);
+      core.setFailed(`There was an error finding or loading your OpenAPI/Swagger file.\n\n${err && err.message}`);
     });
 }
 
