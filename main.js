@@ -117,7 +117,7 @@ async function run() {
           resolveWithFullResponse: true,
         };
 
-        return request.put(`https://dash.readme.io/api/v1/api-specification/${apiSettingId}`, options).then(
+        return request.put(`https://dash.readme.com/api/v1/api-specification/${apiSettingId}`, options).then(
           () => {
             return 'Success!';
           },
