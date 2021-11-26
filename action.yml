@@ -1,17 +1,32 @@
 name: 'ReadMe API GitHub Sync'
 description: 'Sync API Spec files to ReadMe automatically'
 author: 'ReadMe'
+
 branding:
   icon: 'code'
   color: 'blue'
+
 inputs:
-  readme-oas-key:
-    description: 'Your ReadMe key, which we give you when setting up GitHub Sync in ReadMe!'
+  api-version:
+    description: 'ReadMe version to sync API into (Default: info.version in your schema)'
+    required: false
+
+  docs-path:
+    description: 'Path to your md docs folder (defaults to `docs/`)'
+    required: false
 
   oas-file-path:
     description: 'The relative path for your API spec file (Default: We try to guess!)'
-  api-version:
-    description: 'ReadMe version to sync API into (Default: info.version in your schema)'
+    required: false
+
+  readme-oas-key:
+    description: 'Your ReadMe key, which we give you when setting up GitHub Sync in ReadMe!'
+    required: true
+
+  type:
+    description: 'Type of document you want to upload (oas, md). Defaults to openapi'
+    required: false
+
 runs:
   using: 'node12'
   main: 'main.js'

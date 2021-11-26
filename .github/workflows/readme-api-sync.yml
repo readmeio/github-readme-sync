@@ -1,0 +1,31 @@
+name: Sync to ReadMe
+on:
+  push:
+    branches:
+      - master
+jobs:
+  markdown:
+    name: Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Upload Markdown docs
+        uses: ./
+        with:
+          docs-path: demo/docs
+          readme-oas-key: ${{ secrets.README_OAS_KEY }}
+          type: md
+
+  oas:
+    name: OAS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Upload OpenAPI docs
+        uses: ./
+        with:
+          api-version: 'v1.0.0'
+          readme-oas-key: ${{ secrets.README_OAS_KEY }}
+          type: oas
