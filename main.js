@@ -63,10 +63,16 @@ async function run() {
   debug(`readmeKey (split from \`readme-oas-key\`): ${readmeKey}`);
   debug(`apiSettingId (split from \`readme-oas-key\`): ${apiSettingId}`);
 
+  const workingDir = core.getInput('working-dir');
+  debug(`workingDir (from \`working-dir\` input): ${workingDir}`);
   const apiVersion = core.getInput('api-version');
   debug(`apiVersion (from \`api-version\` input): ${apiVersion}`);
   const apiFilePath = core.getInput('oas-file-path');
   debug(`apiFilePath (from \`oas-file-path\` input): ${apiFilePath}`);
+
+  if (workingDir) {
+    process.chdir(workingDir)
+  }
 
   let baseFile = apiFilePath;
 

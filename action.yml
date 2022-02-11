@@ -8,6 +8,8 @@ inputs:
   readme-oas-key:
     description: 'Your ReadMe key, which we give you when setting up GitHub Sync in ReadMe!'
 
+  working-dir:
+    description: 'The given directory as working directory.'
   oas-file-path:
     description: 'The relative path for your API spec file (Default: We try to guess!)'
   api-version:
