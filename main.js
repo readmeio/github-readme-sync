@@ -13,6 +13,10 @@ function sanitize(input) {
 }
 
 async function run() {
+  core.warning(
+    'This GitHub Action is now deprecated. It will continue to operate but we recommend migrating to our newest GitHub Action soon. Read more at https://docs.readme.com/docs/automatically-sync-api-specification-with-github'
+  );
+
   let oasKey;
   let readmeKey;
   let apiSettingId;

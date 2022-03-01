@@ -1,5 +1,3 @@
-# ReadMe GitHub Sync
+# ReadMe GitHub Sync (Legacy) ⚠️
 
-A GitHub action for syncing to ReadMe!
-
-View the full docs for setup here: [https://docs.readme.com/docs/automatically-sync-api-specification-with-github](https://docs.readme.com/docs/automatically-sync-api-specification-with-github)
+> ⚠️ This GitHub Action repository is now deprecated in favor of [`rdme`](https://github.com/readmeio/rdme), which has GitHub Action support for syncing OpenAPI files, directories of Markdown files, and more. Workflows using this repository will continue to function normally, but development and support related this repository is now closed and this repository is archived. Check out [our docs](https://docs.readme.com/docs/automatically-sync-api-specification-with-github) to learn more!
